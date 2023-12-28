@@ -1,0 +1,13 @@
+{% extends "home.html" %} 
+
+{% block content %} 
+<h2>{{ tag.name }} Tag </h2>
+{% for post in tag.tag_posts.all %}
+<div class="post">
+  <h3>{{ post.title }} on {{ post.publication_date }}</h3>
+  <p>{{post.content}}</p>
+  <span>Categories: {% for category in post.categories.all %} {{category.name}} {% endfor %} </span>
+</div>
+{% empty %} No posts for the tag {{ tag }} now!! {% endfor %}
+
+{% endblock content %}

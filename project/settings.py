@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     # my apps
     'blog',
     'authentication',
+    
+    # django-watson search
+    'watson',
 ]
 
 MIDDLEWARE = [

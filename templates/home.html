@@ -1,65 +1,276 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Your Website Name</title>
-    <!-- Add your CSS stylesheets and other necessary meta tags -->
-</head>
-<body>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #ffffff;
+        color: #000000;
+      }
+
+      header {
+        background-color: #eaceeb;
+        color: #ffffff;
+        padding: 20px;
+      }
+
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      nav ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+      }
+
+      nav ul li {
+        margin-right: 20px;
+      }
+
+      nav ul li a {
+        color: #ffffff;
+        text-decoration: none;
+      }
+
+      #banner {
+        background-image: url("path/to/banner-image.jpg");
+        background-size: cover;
+        height: 300px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #banner h1 {
+        font-size: 36px;
+        font-weight: bold;
+        color: #eaceeb;
+        text-align: center;
+      }
+
+      #categories {
+        background-color: #ffffff;
+        padding: 20px;
+      }
+
+      #categories h2 {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+
+      .dropdown-menu {
+        display: none;
+        position: absolute;
+        background-color: #eaceeb;
+        padding: 10px;
+        list-style-type: none;
+        margin: 0;
+      }
+
+      .dropdown:hover .dropdown-menu {
+        display: block;
+      }
+
+      .dropdown-menu li {
+        margin-bottom: 5px;
+      }
+
+      .dropdown-menu li a {
+        color: #ffffff;
+        text-decoration: none;
+      }
+
+      .category-list {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .category-list a{
+        display: block;
+        padding: 10px 20px;
+        margin: 0 10px;
+        background-color: #eaceeb;
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: bold;
+        border-radius: 20px;
+      }
+
+      .category-list form{
+        display: block;
+        padding: 10px 20px;
+        margin: 0 10px;
+        background-color: #eaceeb;
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: bold;
+        border-radius: 20px;
+      }
+
+      #latest-posts {
+        background-color: #ffffff;
+        padding: 20px;
+      }
+
+      #latest-posts h2 {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+
+      .post {
+        margin-bottom: 20px;
+      }
+
+      .post h3 {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .post p {
+        margin-bottom: 10px;
+      }
+
+      footer {
+        background-color: #eaceeb;
+        color: #ffffff;
+        padding: 20px;
+        text-align: center;
+      }
+
+      footer p {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
     <header>
-        <!-- Add your header content here, such as logo, navigation menu, etc. -->
+      <nav>
+        <ul>
+          <li><a href="{% url  'blog:home' %}">Home</a></li>
+
+          <li class="dropdown">
+            <a href="#">Categories</a>
+            <ul class="dropdown-menu">
+              {% for category in categories %}
+              <li>
+                <a href="{% url  'blog:category_detail' category.pk %}"
+                  >{{ category.name }}</a
+                >
+              </li>
+              {% endfor %}
+            </ul>
+          </li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </nav>
     </header>
-    
+
     <section id="banner">
-        <!-- Add your banner or hero image with a catchy headline -->
+      <h1>Welcome to Joseline's Insights</h1>
     </section>
-    
+
+    {% if categories %}
+
     <section id="categories">
-        <div class="container">
-            <h2>Categories</h2>
-            <div class="category">
-                <a href="#">Style</a>
-                <a href="#">Beauty</a>
-                <a href="#">Travel</a>
-                <a href="#">Lifestyle</a>
-                <a href="#">Motherhood</a>
-                <a href="#">Wedding</a>
-            </div>
-        </div>
+      <h2>Categories</h2>
+      <div class="category-list">
+        {% for category in categories %}
+        <a href="{% url  'blog:category_detail' category.pk %}"
+          >{{category.name}}</a
+        >
+        {% endfor %}
+      </div>
     </section>
+
+    {% endif %} 
     
+    {% block content %}
+
+    <div id="categories" class="category-list">
+      <form action="{% url 'blog:search_post' %}" method="GET">
+        <input
+          type="text"
+          id="post"
+          name="post"
+          placeholder="Search a post with keywords?!"
+        
+        />
+
+        <input
+                type="text"
+                id="category"
+                name="category"
+                placeholder="Search by category?"
+              />
+        <button type="submit">Search</button>
+      </form>
+    </div>
+
     <section id="latest-posts">
-        <div class="container">
-            <h2>Latest Posts</h2>
-            <div class="post-list">
-                <!-- Display your latest blog posts with their titles, excerpts, and publication dates -->
-                <div class="post">
-                    <h3><a href="#">Fall Coat Trends: Embrace Vibrant Prints and Colors</a></h3>
-                    <p>Ah, the magical season of fall in the Big Apple! It’s a time when the city comes alive with a kaleidoscope of colors, and...</p>
-                    <span class="publication-date">Published on September 28, 2023</span>
-                </div>
-                <!-- Repeat the above structure for other posts -->
-            </div>
-        </div>
+      <h2>Latest Posts</h2>
+
+      {% for post in posts %}
+
+      <div class="post">
+        <h3>{{ post.title }} on {{ post.publication_date }}</h3>
+        <p>{{post.content}}</p>
+        <span
+          >Tags: {% for tag in post.tags.all %}
+          <a href="{% url  'blog:tag_detail' tag.pk %}">{{tag.name}}</a> {% if not forloop.last %}, {% endif %} {% endfor %}
+        </span>
+      </div>
+
+      {% endfor %}
     </section>
-    
-    <section id="about">
-        <div class="container">
-            <h2>About</h2>
-            <p>Add a brief description of your website and your mission. You can also include information about the author or the team behind the blog.</p>
-        </div>
-    </section>
-    
-    <section id="partnerships">
-        <div class="container">
-            <h2>Partnerships</h2>
-            <p>Showcase your brand partnerships, collaborations, or featured brands with logos or images.</p>
-        </div>
-    </section>
+
+    {% comment %} <form action="{% url 'blog:filter_by_category' 0 %}" method="GET">
+      <select name="category">
+        <option value="0">All Categories</option>
+        {% for category in categories %}
+        <option value="{{ category.id }}">{{ category.name }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit">Filter</button>
+    </form>
+
+    <form action="{% url 'blog:filter_by_tag' 0 %}" method="GET">
+      <select name="tag">
+        <option value="0">All Tags</option>
+        {% for tag in tags %}
+        <option value="{{ tag.id }}">{{ tag.name }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit">Filter</button>
+    </form>
+
+    <ul>
+      {% for blog_post in posts %}
+      <li>
+        <h3>{{ blog_post.title }}</h3>
+        <p>{{ blog_post.content }}</p>
+        <p>Category: {{ blog_post.category.name }}</p>
+        <p>
+          Tags: {% for tag in blog_post.tags.all %}{{ tag.name }}{% if not
+          forloop.last %}, {% endif %}{% endfor %}
+        </p>
+      </li>
+
+      {% endfor %}
+    </ul>  {% endcomment %}
+    {% endblock content %}
     
     <footer>
-        <!-- Add your footer content, such as social media links, copyright information, etc. -->
+      <p>&copy; 2023 Joseline's Insights. All rights reserved.</p>
     </footer>
-    
-    <!-- Add your JavaScript files and other necessary scripts -->
-</body>
+  </body>
 </html>
