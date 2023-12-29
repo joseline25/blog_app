@@ -14,6 +14,9 @@ urlpatterns = [
     # edit a post
     path('post_edit/<int:pk>/',
          views.post_edit, name='post_edit'),
+    # detail of a post
+    path('post_detail/<int:pk>/',
+         views.post_edit, name='post_detail'),
     # delete a post
     path('post_delete/<int:pk>/',
          views.post_delete, name='post_delete'),
@@ -27,10 +30,5 @@ urlpatterns = [
          views.tag_detail, name='tag_detail'),
     path('search_post/', views.search_post, name='search_post'),
     
-#     # filter by category 2
-#     path('filter_by_category/<int:pk>/',
-#          views.filter_by_category, name='filter_by_category'),
-#     # filter by  2
-#     path('filter_by_tag/<int:pk>/',
-#          views.filter_by_tag, name='filter_by_tag'),
+#     
 ]
