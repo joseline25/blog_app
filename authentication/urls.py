@@ -7,7 +7,9 @@ app_name = "authentication"
 urlpatterns = [
     path('register/', views.register, name='register'),
     path('login/', LoginView.as_view(template_name='authentication/login.html'), name='login'),
-    path('logout/', LogoutView.as_view(next_page='home'), name='logout'),
+    path('logout/', LogoutView.as_view(next_page='blog:home'), name='logout'), # it is not working
+    # User profile
+    path('profile/', views.profile, name='profile'),
 ]
 
 """ 
