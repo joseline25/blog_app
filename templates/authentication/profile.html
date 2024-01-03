@@ -1,0 +1,34 @@
+{% extends "home.html" %}
+
+{% block content %}
+<p><a href="{% url 'blog:post_create' %}">Create a Post?</a></p>
+
+<ul>
+    <li><p>{{ current_user.username }}</p></li>
+    <li><p>{{ current_user.first_name }}</p></li>
+    <li><p>{{ current_user.last_name }}</p></li>
+</ul>
+
+{% if posts %}
+    
+    {% for post in posts %}
+    <div class="post">
+
+        <h3><a href="{% url  'blog:post_detail' post.pk %}">{{ post.title }} </a> on {{ post.publication_date }}</h3>
+        
+        <span
+          >Tags: {% for tag in post.tags.all %}
+          <a href="{% url  'blog:tag_detail' tag.pk %}">{{tag.name}}</a> {% if not forloop.last %}, {% endif %} {% endfor %}
+        </span>
+      </div>
+    {% endfor %}
+        
+{% endif %}
+    <form method="post" enctype="multipart/form-data" >
+        {% csrf_token %}
+        {{ user_form.as_p }}
+        {{ profile_form.as_p }}
+        <button type="submit">Update Profile</button>
+    </form>
+
+{% endblock content %}

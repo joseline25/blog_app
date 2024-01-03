@@ -17,6 +17,8 @@ urlpatterns = [
     # detail of a post
     path('post_detail/<int:pk>/',
          views.post_edit, name='post_detail'),
+    # create a post
+    path('post_create/', views.post_create, name='post_create'),
     # delete a post
     path('post_delete/<int:pk>/',
          views.post_delete, name='post_delete'),

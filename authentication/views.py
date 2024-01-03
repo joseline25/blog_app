@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
+from blog.models import *
 
 from .forms import UserProfileForm, UserForm
 # Create your views here.
@@ -41,14 +42,18 @@ user and profile forms with the current user's data.
 
 @login_required
 def profile(request):
-    
+    # get the list of all of this user posts
+    posts = Post.objects.filter(author=request.user)
     
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
         profile_form = UserProfileForm(request.POST, request.FILES, instance=request.user)
 
-        if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
+        if   profile_form.is_valid():
+            # if user_form.is_valid() and profile_form.is_valid()
+            #user_form.save()
+            print(profile_form)
+    
             profile_form.save()
             return redirect('authentication:profile')
         """ 
@@ -63,6 +68,7 @@ def profile(request):
         'user_form': user_form,
         'profile_form': profile_form,
         'current_user': request.user,
+        'posts': posts,
     }
 
     return render(request, 'authentication/profile.html', context)

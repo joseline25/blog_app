@@ -173,7 +173,7 @@
           <li><a href="#">Contact</a></li>
           
           {% if user %}
-          <li> Hi <a href="#">{{user.username}}</a>!!</li>
+          <li> Hi <a href="{% url 'authentication:profile' %}">{{user.username}}</a>!!</li>
           <li><a href="{% url 'authentication:logout' %}">Logout?</a></li>
           {% else %}
           <li><a href="#">Login</a></li>

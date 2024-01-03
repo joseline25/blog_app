@@ -15,6 +15,21 @@
       </span>
     </div>
 
-   
+    <div class="post">
+      <h4>Comments</h4>
+      {% for comment in comments %}
+      <p>{{comment.content}}</p>
+      <span>
+        by  {{ comment.author.username }}
+      </span>
+      {% endfor %}
+    </div>
+
+    <form method="post">
+      {% csrf_token %}
+    {{form}}
+    <button type="submit">Save</button>
+  </form>
+
   </section>
 {% endblock content %}

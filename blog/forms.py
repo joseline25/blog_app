@@ -7,7 +7,17 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ['title', 'content']
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Restaurant name'}),
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Title '}),
             'content': forms.Textarea(),
 
         }
+        
+class CommentForm(forms.ModelForm):
+    
+    class Meta:
+        model = Comment
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(),
+        }
+        

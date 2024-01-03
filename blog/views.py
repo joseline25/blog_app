@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Post, Category, Comment, Tag
-from .forms import PostForm
+from .forms import PostForm, CommentForm
 from django.db.models import Q
 
 from django.contrib.auth.decorators import login_required
@@ -72,21 +72,38 @@ def search_post(request):
 @login_required
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
+    # Retrieve all comments for the post
+    comments = post.comments.all()
     user = request.user
     print(user.username)
-    return render(request, 'blog/post_detail.html', {'post': post, 'user': user})
+    # send the comment form 
+    form = CommentForm()
+    # register a comment
+    if request == 'POST':
+        form = CommentForm(request.POST)
+        print(form)
+        if form.is_valid():
+            
+            comment = form.save(commit=False)
+            comment.author = user
+            comment.post = post
+            comment.save()
+            return redirect('blog:post_detail', pk=post.pk)
+    return render(request, 'blog/post_detail.html', {'form': form, 'post': post, 'user': user, 'comments': comments})
 
 
 @login_required
 def post_create(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
+        print(form)
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
             post.save()
-            return redirect('post_detail', pk=post.pk)
+            return redirect('blog:post_detail', pk=post.pk)
     else:
+        print('here')
         form = PostForm()
     return render(request, 'blog/post_form.html', {'form': form})
 
